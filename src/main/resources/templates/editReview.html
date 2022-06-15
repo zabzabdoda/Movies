@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Review</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<div th:replace="header :: header">...</div>
+
+<div>
+    <form class="form-signin" method="post" th:action="@{/private/editReview}" th:object="${review}">
+
+        <label for="reviewText" class="formbuilder-text-label">Review</label>
+        <textarea type="text" th:value="${review.reviewText}" placeholder="Review" th:field="*{reviewText}" class="form-control" name="reviewText" access="false" maxlength="400" id="reviewText" rows="10" cols="20"/>
+
+        <label for="starRating" class="formbuilder-number-label">Movie Rating</label>
+        <input type="number" th:value="${review.starRating}" class="form-control" th:field="*{starRating}" name="starRating" access="true" min="1" max="5" step="1" id="starRating">
+
+        <input type="hidden" th:value="${review.movie.movieId}" name="movie_id" access="false" id="movie_id">
+        <input type="hidden" th:value="${review.reviewId}" name="review_id" access="false" id="review_id">
+
+        <button type="submit" class="btn-default btn" name="submit" value="submit" access="false" style="default" id="submit">Submit</button>
+    </form>
+</div>
+
+</body>
+</html>

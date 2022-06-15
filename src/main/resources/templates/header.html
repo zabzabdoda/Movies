@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+  <head>
+  </head>
+	<body>
+	<header class="header">
+		<h1>Movie Rating Website</h1>
+		<p>Tyler Massey</p>
+		<div class="topnav">
+			<a href="/public/home">Home</a>
+			<a href="/public/search">Movie Search</a>
+			<a href="/private/dashboard" sec:authorize="isAuthenticated()">Dashboard</a>
+			<a href="/private/logout" sec:authorize="isAuthenticated()">Logout</a>
+			<a href="/public/login" sec:authorize="isAnonymous()">Login</a>
+			<a href="/public/register" sec:authorize="isAnonymous()">Register</a>
+		</div>
+	</header>
+
+	<script src="js/jquery.min.js"></script>
+  <script src="js/popper.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/main.js"></script>
+
+	</body>
+</html>
+

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<div th:replace="header.html :: header">...</div>
+
+<div>
+    <div th:each="movie : ${topMovies}">
+        <a th:href="'/public/movie?id='+${movie.movieId}"  th:text="${movie.movieName}"></a>
+        <br/>
+        <br/>
+    </div>
+</div>
+
+
+</body>
+</html>

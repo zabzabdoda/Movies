@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<div th:replace="header :: header">...</div>
+
+<h3>Reviews</h3>
+<ul>
+  <li th:each="review : ${reviews}">
+      <a th:text="${review.movie.movieName}+': '+${review.reviewText}"></a>
+      <a sec:authorize="isAuthenticated()" th:if="${user.id} == ${review.user.id}" th:href="'/private/editReview?id='+${review.reviewId}">Edit</a>
+      <a sec:authorize="isAuthenticated()" th:if="${user.id} == ${review.user.id}" th:href="'/private/deleteReview?id='+${review.reviewId}">Delete</a>
+  </li>
+
+</ul>
+
+</body>
+</html>
