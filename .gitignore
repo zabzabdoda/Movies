@@ -38,7 +38,7 @@ hs_err_pid*
 
 .idea
 
-gradle
+/gradle/
 
 # User-specific stuff:
 .idea/workspace.xml
@@ -111,3 +111,4 @@ Temporary Items
 .apdisk
 
 secrets.properties
+/.idea/
