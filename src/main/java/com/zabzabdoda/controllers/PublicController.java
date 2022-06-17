@@ -1,6 +1,5 @@
 package com.zabzabdoda.controllers;
 
-import com.zabzabdoda.ConfigProperties;
 import com.zabzabdoda.model.Movie;
 import com.zabzabdoda.model.Review;
 import com.zabzabdoda.model.User;
@@ -10,16 +9,10 @@ import com.zabzabdoda.repository.UserRepository;
 import com.zabzabdoda.services.PosterService;
 import com.zabzabdoda.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.GsonJsonParser;
-import org.springframework.boot.json.JsonParser;
-import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,18 +20,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("public")
@@ -59,26 +47,49 @@ public class PublicController {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    ConfigProperties configProperties;
-
     @RequestMapping({"","/"})
     public ModelAndView showHome(Model model){
         return new ModelAndView("/public/home");
     }
 
     @RequestMapping("/home")
-    public ModelAndView showHomePage(Model model){
+    public ModelAndView showHomePage(Model model, @RequestParam(required = false) String sortby){
         ModelAndView modelAndView = new ModelAndView("home.html");
-        List<Integer> reviews = reviewRepository.findMostPopular();
         List<Movie> movies = new ArrayList<>();
-        for(Integer r : reviews){
-            movies.add(movieRepository.findByMovieId(r.intValue()));
+        System.out.println(sortby);
+        if(sortby == null) {
+            sortby = "popularity";
         }
+        if (sortby.equals("popularity")) {
+            movies = movieRepository.findAll(PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "popularity"))).toList();
+        } else if (sortby.equals("ratinghigh")) {
+            movies = movieRepository.findTopmoviesByRating(PageRequest.of(0, 10));
+        } else if (sortby.equals("ratinglow")) {
+            movies = movieRepository.findLowestmoviesByRating(PageRequest.of(0, 10));
+        } else if (sortby.equals("reviews")) {
+            List<Integer> reviews = reviewRepository.findMostPopular();
+            for (Integer r : reviews) {
+                movies.add(movieRepository.findByMovieId(r.intValue()));
+            }
+        }
+        try {
+            for (Movie m : movies) {
+                if (m.getPosterUrl() == null) {
+                    m.setPosterUrl(posterService.getPoster(m.getImdbId()));
+                }
+            }
+        } catch (Exception e) {
+        }
+        movieRepository.saveAll(movies);
         modelAndView.addObject("topMovies",movies);
         return modelAndView;
     }
 
+    @PostMapping("/home")
+    public ModelAndView showHomePagePost(Model model, @RequestParam(required = false) String sortby){
+        ModelAndView modelAndView = new ModelAndView("redirect:/public/home?sortby="+sortby);
+        return modelAndView;
+    }
 
     @RequestMapping("/register")
     public ModelAndView showRegisterPage(Model model){
@@ -146,6 +157,7 @@ public class PublicController {
         modelAndView.addObject("movie",movie);
         modelAndView.addObject("reviews",reviews);
         modelAndView.addObject("review",new Review());
+        modelAndView.addObject("movieAverage",movie.getRating());
         return modelAndView;
     }
 
@@ -160,6 +172,7 @@ public class PublicController {
             modelAndView.addObject("user",new User());
         }
         List<Review> reviews = reviewRepository.findByUser_id(user.getId());
+        modelAndView.addObject("dashboardUser",user);
         modelAndView.addObject("reviews",reviews);
         return modelAndView;
     }
@@ -175,37 +188,26 @@ public class PublicController {
 
     @PostMapping("/search")
     public ModelAndView returnMovieSearch(Model model, @RequestParam(required = false) String search){
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<Movie> movies = movieRepository.findBymovieNameContainingIgnoreCase(search,pageable);
-        try {
-            for (Movie m : movies) {
-                if(m.getPosterUrl() == null) {
-                    m.setPosterUrl(getPoster(m.getImdbId()));
-                }
-            }
-        }catch (Exception e){}
-        movieRepository.saveAll(movies);
         ModelAndView modelAndView = new ModelAndView("movieSearch.html");
-        modelAndView.addObject("movies",movies);
-        return modelAndView;
-    }
-
-    private String getPoster(String imdbUrl){
-        try {
-            String url = "https://movie-database-alternative.p.rapidapi.com/?r=json&i="+imdbUrl;
-            RestTemplate restTemplate = new RestTemplate();
-            HttpHeaders headers = new HttpHeaders();
-            headers.set("X-RapidAPI-Key",configProperties.apiKey());
-            headers.set("X-RapidAPI-Host",configProperties.apiUrl());
-            HttpEntity<String> httpEntity = new HttpEntity<>("", headers);
-            ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.GET,httpEntity,String.class);
-            JsonParser springParser = JsonParserFactory.getJsonParser();
-            Map<String, Object> g = springParser.parseMap(result.getBody());
-            return (String) g.get("Poster");
-        }catch (Exception e){
-            return null;
+        Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC,"popularity"));
+        List<Movie> movies = movieRepository.findBymovieNameContainingIgnoreCase(search,pageable);
+        if(movies.size() > 0) {
+            try {
+                for (Movie m : movies) {
+                    if (m.getPosterUrl() == null) {
+                        m.setPosterUrl(posterService.getPoster(m.getImdbId()));
+                    }
+                }
+            } catch (Exception e) {
+            }
+            movieRepository.saveAll(movies);
+            modelAndView.addObject("movies",movies);
+        }else{
+            modelAndView.addObject("errorMessage","No results found");
         }
 
+
+        return modelAndView;
     }
 
 }

@@ -9,14 +9,27 @@
 
 <div th:replace="header.html :: header">...</div>
 
-<div>
-    <div th:each="movie : ${topMovies}">
-        <a th:href="'/public/movie?id='+${movie.movieId}"  th:text="${movie.movieName}"></a>
-        <br/>
-        <br/>
-    </div>
+<div class="center">
+    <form method="post" th:action="@{/public/home}">
+        <select name="sortby" id="sortby">
+            <option value="popularity">Popularity</option>
+            <option value="ratinghigh">Highest Rated</option>
+            <option value="ratinglow">Lowest Rated</option>
+            <option value="reviews">Number of Reviews</option>
+        </select>
+        <input type="submit" id="submit" value="Sort" />
+    </form>
 </div>
 
+<div class="grid">
+    <div class="movieBox" th:each="movie : ${topMovies}" >
+        <a class="btn btn-primary posterText" th:href="'/public/movie?id='+${movie.movieId}">
+            <img class="moviePoster" th:src="${movie.posterUrl}" />
+            <p th:text="${movie.tagline}"></p>
+            <h3 th:text="${movie.movieName}"></h3>
+        </a>
+    </div>
+</div>
 
 </body>
 </html>

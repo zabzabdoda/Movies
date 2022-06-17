@@ -1,5 +1,6 @@
 package com.zabzabdoda;
 
+import com.zabzabdoda.config.ConfigProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;

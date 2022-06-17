@@ -13,6 +13,7 @@
 			<a href="/private/logout" sec:authorize="isAuthenticated()">Logout</a>
 			<a href="/public/login" sec:authorize="isAnonymous()">Login</a>
 			<a href="/public/register" sec:authorize="isAnonymous()">Register</a>
+			<a href="/admin/adminPanel" sec:authorize="hasRole('ADMIN')">Admin Panel</a>
 		</div>
 	</header>
 

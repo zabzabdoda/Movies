@@ -34,12 +34,14 @@ public class PrivateController {
     MovieRepository movieRepository;
 
     @RequestMapping("/dashboard")
-    public ModelAndView showDashboard(Model model, Authentication authentication){
+    public ModelAndView showDashboard(Model model, Authentication authentication, HttpSession session){
         User user = userRepository.readByUsername(authentication.getName());
         List<Review> reviews = reviewRepository.findByUser_id(user.getId());
         ModelAndView modelAndView = new ModelAndView("dashboard.html");
         modelAndView.addObject("reviews",reviews);
         modelAndView.addObject("user",user);
+        modelAndView.addObject("dashboardUser",user);
+        session.setAttribute("loggedInUser",user);
         return modelAndView;
     }
 
@@ -78,7 +80,8 @@ public class PrivateController {
     public ModelAndView editReview(Model model, @RequestParam int id, HttpSession session){
         ModelAndView modelAndView = new ModelAndView("editReview.html");
         Review review = reviewRepository.findByReviewId(id);
-        if(review != null && review.getUser().equals(session.getAttribute("loggedInUser"))){
+        User loggedIn = (User) session.getAttribute("loggedInUser");
+        if(review != null && review.getUser().getId() == loggedIn.getId() || loggedIn.getRole().getRoleName().equals("ADMIN")){
             modelAndView.addObject("review",review);
             return modelAndView;
         }
@@ -105,7 +108,7 @@ public class PrivateController {
         }
         Review review = reviewRepository.findByReviewId(id);
         User u = ((User)session.getAttribute("loggedInUser"));
-        if(review.getUser().getId() == u.getId() || u.getRole().getRoleName().equals("ADMIN")) {
+        if(u != null && review.getUser().getId() == u.getId() || u.getRole().getRoleName().equals("ADMIN")) {
             reviewRepository.delete(review);
         }
         ModelAndView modelAndView = new ModelAndView(redirect);

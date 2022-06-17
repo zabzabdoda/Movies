@@ -9,38 +9,43 @@
 
 <div th:replace="header :: header">...</div>
 
-<div>
-  <img th:src="@{${movie.posterUrl}}"/>
-    <p th:text="${movie.movieName}"></p>
-</div>
+<div class="center">
 
-<div sec:authorize="isAuthenticated()">
-    <form class="form-signin" method="post" th:action="@{/private/postReview}" th:object="${review}">
+    <div>
+      <img th:src="@{${movie.posterUrl}}"/>
+        <p th:text="${movie.movieName}"></p>
+    </div>
 
-        <label for="reviewText" class="formbuilder-text-label">Review:</label>
-        <textarea type="text" placeholder="Review" th:field="*{reviewText}" class="form-control" name="reviewText" access="false" maxlength="400" id="reviewText" rows="10" cols="20"/>
-        <br/>
-        <label for="starRating" class="formbuilder-number-label">Rating:</label>
-        <input type="number" class="form-control" th:field="*{starRating}" name="starRating" access="true" min="1" max="5" step="1" id="starRating">
-        <br/>
-        <input type="hidden" name="movie_id" access="false" id="movie_id" th:value="${movie.movieId}">
-        <br/>
-        <button type="submit" class="btn-default btn" name="submit" value="submit" access="false" style="default" id="submit">Submit</button>
-    </form>
-</div>
+    <div sec:authorize="isAuthenticated()">
+        <form class="form-signin" method="post" th:action="@{/private/postReview}" th:object="${review}">
 
-
-<div>
-    <h3>Reviews</h3>
-    <ul>
-        <li th:each="review : ${reviews}">
-            <a class="nextTo" th:text="${review.createdBy}" th:href="'/public/dashboard?username='+${review.createdBy}"></a> <p class="criticColor nextTo" th:if="${review.isCriticReview}" th:text="'*'"></p> <p class="nextTo" th:text="' gave a rating of '+${review.starRating}+':'"> </p>
-            <p th:text="${review.reviewText}">    </p>
+            <label for="reviewText" class="formbuilder-text-label">Review:</label>
+            <textarea type="text" placeholder="Review" th:field="*{reviewText}" class="form-control" name="reviewText" access="false" maxlength="400" id="reviewText" rows="10" cols="20"/>
             <br/>
-        </li>
-    </ul>
+            <label for="starRating" class="formbuilder-number-label">Rating:</label>
+            <input type="number" class="form-control" th:field="*{starRating}" name="starRating" access="true" min="1" max="5" step="1" id="starRating">
+            <br/>
+            <input type="hidden" name="movie_id" access="false" id="movie_id" th:value="${movie.movieId}">
+            <br/>
+            <button type="submit" class="btn-default btn" name="submit" value="submit" access="false" style="default" id="submit">Submit</button>
+        </form>
+    </div>
 
+    <div>
+        <p th:text="${movieAverage}"></p>
+    </div>
+
+    <div>
+        <h3>Reviews</h3>
+        <ul>
+            <div class="reviewBox" th:each="review : ${reviews}">
+                <a class="nextTo posterText" th:text="${review.createdBy}" th:href="'/public/dashboard?username='+${review.createdBy}"></a> <p class="criticColor nextTo" th:if="${review.isCriticReview}" th:text="'*'"></p> <p class="nextTo" th:text="' gave a rating of '+${review.starRating}+':'"> </p>
+                <p th:text="${review.reviewText}">    </p>
+                <br/>
+            </div>
+        </ul>
+
+    </div>
 </div>
-
 </body>
 </html>

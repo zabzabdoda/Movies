@@ -9,20 +9,25 @@
 
 <div th:replace="header :: header">...</div>
 
-
-<div>
-    <form method="post" th:action="@{/public/search}" th:object="${movies}">
-        <input type="text" id="search" name="search" class="form-control" placeholder="Search" required autofocus/>
-        <input type="submit" name="submit" id="submit" value="submit"/>
-    </form>
+<div class="center">
+    <div>
+        <form method="post" th:action="@{/public/search}" th:object="${movies}">
+            <input type="text" id="search" name="search" class="form-control" placeholder="Search" required autofocus/>
+            <input type="submit" name="submit" id="submit" value="submit"/>
+        </form>
+    </div>
 </div>
+    <p th:if="${errorMessage} != null" th:text="${errorMessage}"></p>
+    <div class="grid">
+        <div class="movieBox" th:each="movie : ${movies}" >
+            <a class="btn btn-primary posterText" th:href="'/public/movie?id='+${movie.movieId}">
+                <img class="moviePoster" th:src="${movie.posterUrl}" />
+                <p th:text="${movie.tagline}"></p>
+                <h3 th:text="${movie.movieName}"></h3>
+            </a>
+        </div>
+    </div>
 
-<div class="movieBox" th:each="movie : ${movies}" >
-    <a class="btn btn-primary" th:href="'/public/movie?id='+${movie.movieId}">
-        <img class="moviePoster" th:src="${movie.posterUrl}" />
-        <p th:text="${movie.movieName}"></p>
-    </a>
-</div>
 
 </body>
 </html>

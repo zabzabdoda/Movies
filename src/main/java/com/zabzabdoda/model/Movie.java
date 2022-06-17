@@ -52,4 +52,13 @@ public class Movie extends BaseEntity{
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews = new LinkedHashSet<>();
 
+
+    public float getRating(){
+        float f = 0;
+        for(Review review : reviews){
+            f += review.getStarRating();
+        }
+        return f/reviews.size();
+    }
+
 }

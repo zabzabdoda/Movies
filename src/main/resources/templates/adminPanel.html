@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<div th:replace="header :: header">...</div>
+
+<div class="center">
+    <table>
+        <tr>
+            <td>Username</td>
+            <td>Email</td>
+            <td>ID</td>
+            <td>Role</td>
+            <td>Account Created</td>
+        </tr>
+        <tr th:each="user : ${users}">
+            <td><a th:href="'/public/dashboard?username='+${user.username}" th:text="${user.username}"></a></td>
+            <td th:text="${user.email}"></td>
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.role.roleName}"></td>
+            <td th:text="${user.createdAt}"></td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>

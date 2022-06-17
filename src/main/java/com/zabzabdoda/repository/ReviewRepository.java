@@ -20,5 +20,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
             "ORDER BY COUNT(e.movie.id) DESC")
     List<Integer> findMostPopular();
 
+
+
     Review findByReviewId(int id);
 }

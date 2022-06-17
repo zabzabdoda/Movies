@@ -1,4 +1,4 @@
-package com.zabzabdoda;
+package com.zabzabdoda.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

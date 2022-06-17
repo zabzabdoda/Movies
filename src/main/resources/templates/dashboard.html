@@ -9,15 +9,34 @@
 
 <div th:replace="header :: header">...</div>
 
-<h3>Reviews</h3>
-<ul>
-  <li th:each="review : ${reviews}">
-      <a th:text="${review.movie.movieName}+': '+${review.reviewText}"></a>
-      <a sec:authorize="isAuthenticated()" th:if="${user.id} == ${review.user.id}" th:href="'/private/editReview?id='+${review.reviewId}">Edit</a>
-      <a sec:authorize="isAuthenticated()" th:if="${user.id} == ${review.user.id}" th:href="'/private/deleteReview?id='+${review.reviewId}">Delete</a>
-  </li>
-
-</ul>
+<div class="center">
+    <h2 th:text="${dashboardUser.username}"></h2>
+    <h3>Reviews</h3>
+    <table>
+        <tr>
+            <td>Movie</td>
+            <td>Review</td>
+            <td>Star Rating</td>
+            <td sec:authorize="isAuthenticated()">Edit</td>
+            <td sec:authorize="isAuthenticated()">Delete</td>
+        </tr>
+        <tr th:each="review : ${reviews}">
+            <td th:text="${review.movie.movieName}"></td>
+            <td th:text="${review.reviewText}"></td>
+            <td th:text="${review.starRating}+'/5'"></td>
+            <td sec:authorize="isAuthenticated()" th:if="${user.id} == ${review.user.id} or ${user.role.roleId} == 1" ><a th:href="'/private/editReview?id='+${review.reviewId}">Edit</a></td>
+            <td sec:authorize="isAuthenticated()" th:if="${user.id} == ${review.user.id} or ${user.role.roleId} == 1" ><a th:href="'/private/deleteReview?id='+${review.reviewId}">Delete</a></td>
+        </tr>
+    </table>
+    <form sec:authorize="hasRole('ADMIN')" method="post" th:action="@{'/admin/changeRole?username='+${dashboardUser.username}}">
+        <select name="changeRole" id="changeRole">
+            <option value="ADMIN">Admin</option>
+            <option value="CRITIC">Critic</option>
+            <option value="USER">User</option>
+        </select>
+        <input type="submit" id="submit" value="Change Role" />
+    </form>
+</div>
 
 </body>
 </html>

@@ -50,7 +50,7 @@ public class User extends BaseEntity{
     @Email(message = "Please provide a valid email address, i.e., name@domain.com")
     private String email;
 
-    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "role_id",referencedColumnName = "role_id",nullable = false)
     private Roles role;
 
@@ -60,7 +60,7 @@ public class User extends BaseEntity{
     @Transient
     private String confirmPassword;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Review> reviews = new LinkedHashSet<>();
 
 }

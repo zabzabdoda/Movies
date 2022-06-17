@@ -14,12 +14,6 @@ body {
 }
 
 
-.grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
 .gridItem {
   border-style: solid;
   width: 200px;
@@ -115,6 +109,12 @@ body {
   display: flex;
 }
 
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
 .topnav a {
   float: left;
   color: #f2f2f2;
@@ -181,20 +181,21 @@ body {
 
 .movieBox{
     border-style: solid;
-    border-width: 1px;
+    border-width: 5px;
+    background-color: #424242;
+    width: 350px;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
     margin-left: auto;
     margin-right: auto;
-    width: 300px;
-    text-align: center;
-    padding: 10px;
-
 }
 
 .moviePoster{
-    width: 200px;
+    width: 300px;
+    padding-top: 15px;
     height: auto;
     text-align: center;
-    padding: 15px;
 }
 
 .nextTo{
@@ -203,5 +204,27 @@ body {
 
 .criticColor{
     color: gold;
+
+}
+
+.posterText{
+    text-decoration: none;
+    color: Red;
+}
+
+.center {
+  margin: auto;
+  text-align: center;
+  width: 50%;
+  padding: 10px;
+}
+
+table, th, td {
+  border:2px solid black;
+}
+
+.reviewBox{
+    border-style: solid;
+    border-width: 2px;
 
 }
