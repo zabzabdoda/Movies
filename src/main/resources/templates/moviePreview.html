@@ -12,7 +12,7 @@
 <div class="center">
 
     <div>
-      <img th:src="@{${movie.posterUrl}}"/>
+      <img class="moviePoster" th:src="@{${movie.posterUrl}}"/>
         <h1 th:text="${movie.movieName}"></h1>
         <h3 th:text="${movie.tagline}"></h3>
         <p th:text="${movie.overview}"></p>
