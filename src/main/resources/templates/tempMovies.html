@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<div th:replace="header :: header">...</div>
+
+<h2 class="center">Movie Requests</h2>
+<p class="center alert alert-success" role="alert" th:if="${!#strings.isEmpty(message)}" th:text="${message}" />
+<div>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Poster URL</th>
+            <th>Budget</th>
+            <th>Homepage</th>
+            <th>Imdb ID</th>
+            <th>Original Language</th>
+            <th>Original Title</th>
+            <th>Overview</th>
+            <th>Tagline</th>
+            <th>Popularity</th>
+            <th>Release Date</th>
+            <th>Revenue</th>
+            <th>Runtime</th>
+            <th>Preview Page</th>
+            <th>Accept</th>
+            <th>Reject</th>
+        </tr>
+        <tr th:each="tempMovie : ${tempMovies}">
+            <form method="post" th:action="@{/admin/tempMovies}" modelAttribute="movie">
+                <td><input type="number" id="movieId" name="movieId" th:value="${tempMovie.movieId}"></td>
+                <td><input type="text" id="movieName" name="movieName" th:value="${tempMovie.movieName}"></td>
+                <td><input type="text" id="posterUrl" name="posterUrl" th:value="${tempMovie.posterUrl}"></td>
+                <td><input type="number" id="budget" name="budget" th:value="${tempMovie.budget}"></td>
+                <td><input type="text" id="homepage" name="homepage" th:value="${tempMovie.homepage}"></td>
+                <td><input type="text" id="imdbId" name="imdbId" th:value="${tempMovie.imdbId}"></td>
+                <td><input type="text" id="originalLanguage" name="originalLanguage" th:value="${tempMovie.originalLanguage}"></td>
+                <td><input type="text" id="originalTitle" name="originalTitle" th:value="${tempMovie.originalTitle}"></td>
+                <td><textarea type="text" id="overview" name="overview" th:text="${tempMovie.overview}"></textarea></td>
+                <td><input type="text" id="tagline" name="tagline" th:value="${tempMovie.tagline}"></td>
+                <td><input type="number" id="popularity" name="popularity" th:value="${tempMovie.popularity}"></td>
+                <td><input type="date" id="releaseDate" name="releaseDate" th:value="${tempMovie.releaseDate}"></td>
+                <td><input type="number" id="revenue" name="revenue" th:value="${tempMovie.revenue}"></td>
+                <td><input type="number" id="runtime" name="runtime" th:value="${tempMovie.runtime}"></td>
+                <td><input type="submit" id="buttonSubmit" name="button" th:value="preview">Preview Page</input></td>
+                <td><input type="submit" id="buttonAccept" name="button" th:value="accept" th:href="'/admin/acceptMovie?id='+${tempMovie.movieId}">Accept</input></td>
+                <td><input type="submit" id="buttonReject" name="button" th:value="reject" th:href="'/admin/rejectMovie?id='+${tempMovie.movieId}">Reject</input></td>
+            </form>
+        </tr>
+    </table>
+
+</div>
+
+</body>
+</html>

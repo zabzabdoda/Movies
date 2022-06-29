@@ -14,11 +14,11 @@
     <h3>Reviews</h3>
     <table>
         <tr>
-            <td>Movie</td>
-            <td>Review</td>
-            <td>Star Rating</td>
-            <td sec:authorize="isAuthenticated()">Edit</td>
-            <td sec:authorize="isAuthenticated()">Delete</td>
+            <th>Movie</th>
+            <th>Review</th>
+            <th>Star Rating</th>
+            <th sec:authorize="isAuthenticated()">Edit</th>
+            <th sec:authorize="isAuthenticated()">Delete</th>
         </tr>
         <tr th:each="review : ${reviews}">
             <td th:text="${review.movie.movieName}"></td>

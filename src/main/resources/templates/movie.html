@@ -11,9 +11,16 @@
 
 <div class="center">
 
+    <form method="post" th:action="@{/admin/deleteMovie?id=}+${movie.movieId}">
+        <input type="submit" name="submit" value="Delete">
+    </form>
     <div>
       <img th:src="@{${movie.posterUrl}}"/>
         <p th:text="${movie.movieName}"></p>
+        <p th:text="${movie.tagline}"></p>
+        <p th:text="${movie.overview}"></p>
+        <p th:text="${movie.budget}"></p>
+        <p th:text="${movie.homepage}"></p>
     </div>
 
     <div sec:authorize="isAuthenticated()">
@@ -37,6 +44,7 @@
 
     <div>
         <h3>Reviews</h3>
+        <h4 th:if="${reviews.size} == 0">No Reviews Yet!</h4>
         <ul>
             <div class="reviewBox" th:each="review : ${reviews}">
                 <a class="nextTo posterText" th:text="${review.createdBy}" th:href="'/public/dashboard?username='+${review.createdBy}"></a> <p class="criticColor nextTo" th:if="${review.isCriticReview}" th:text="'*'"></p> <p class="nextTo" th:text="' gave a rating of '+${review.starRating}+':'"> </p>

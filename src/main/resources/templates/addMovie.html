@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Movie</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<div th:replace="header :: header">...</div>
+
+
+<div class="center">
+    <p>Please add as much information as you can!</p>
+    <p>We can add the rest for you</p>
+    <p class="alert alert-success" role="alert" th:if="${!#strings.isEmpty(message)}" th:text="${message}" />
+    <form class="form-signin" method="post" th:action="@{/public/addMovie}" th:object="${movieTemp}">
+        <input type="text" id="movieName" name="movieName" class="form-control" placeholder="Movie Title" required autofocus>
+        <br/>
+        <input type="number" id="budget" name="budget" class="form-control" placeholder="Budget">
+        <br/>
+        <input type="text" id="homepage" name="homepage" class="form-control" placeholder="Homepage">
+        <br/>
+        <input type="text" id="imdbId" name="imdbId" class="form-control" placeholder="Imdb ID">
+        <br/>
+        <input type="text" id="posterUrl" name="posterUrl" class="form-control" placeholder="Poster URL">
+        <br/>
+        <input type="text" id="originalLanguage" name="originalLanguage" class="form-control" placeholder="Original Language">
+        <br/>
+        <input type="text" id="originalTitle" name="originalTitle" class="form-control" placeholder="Original Title">
+        <br/>
+        <textarea type="text" id="overview" name="overview" class="form-control" placeholder="Overview" ></textarea>
+        <br/>
+        <input type="number" id="popularity" name="popularity" class="form-control" placeholder="Popularity">
+        <br/>
+        <input type="date" id="releaseDate" name="releaseDate" class="form-control" placeholder="Release Date">
+        <br/>
+        <input type="number" id="revenue" name="revenue" class="form-control" placeholder="Revenue">
+        <br/>
+        <input type="number" id="runtime" name="runtime" class="form-control" placeholder="Runtime">
+        <br/>
+        <input type="text" id="tagline" name="tagline" class="form-control" placeholder="Tagline">
+        <br/>
+        <input type="submit" value="Submit" id="submit">
+    </form>
+</div>
+
+
+</body>
+</html>

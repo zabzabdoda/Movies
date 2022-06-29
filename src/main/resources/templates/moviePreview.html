@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+<div th:replace="header :: header">...</div>
+
+<div class="center">
+
+    <div>
+      <img th:src="@{${movie.posterUrl}}"/>
+        <h1 th:text="${movie.movieName}"></h1>
+        <h3 th:text="${movie.tagline}"></h3>
+        <p th:text="${movie.overview}"></p>
+        <p>Budget: <p th:text="${movie.budget}"></p></p>
+        <p>Homepage: <p th:text="${movie.homepage}"></p></p>
+    </div>
+
+    <div>
+        <p th:text="${movieAverage}"></p>
+    </div>
+
+</div>
+</body>
+</html>

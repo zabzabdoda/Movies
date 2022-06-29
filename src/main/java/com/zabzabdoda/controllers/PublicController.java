@@ -1,9 +1,11 @@
 package com.zabzabdoda.controllers;
 
 import com.zabzabdoda.model.Movie;
+import com.zabzabdoda.model.MovieTemp;
 import com.zabzabdoda.model.Review;
 import com.zabzabdoda.model.User;
 import com.zabzabdoda.repository.MovieRepository;
+import com.zabzabdoda.repository.MovieTempRepository;
 import com.zabzabdoda.repository.ReviewRepository;
 import com.zabzabdoda.repository.UserRepository;
 import com.zabzabdoda.services.PosterService;
@@ -40,6 +42,9 @@ public class PublicController {
 
     @Autowired
     MovieRepository movieRepository;
+
+    @Autowired
+    MovieTempRepository movieTempRepository;
 
     @Autowired
     ReviewRepository reviewRepository;
@@ -157,7 +162,9 @@ public class PublicController {
         modelAndView.addObject("movie",movie);
         modelAndView.addObject("reviews",reviews);
         modelAndView.addObject("review",new Review());
-        modelAndView.addObject("movieAverage",movie.getRating());
+        if(reviews.size() > 0) {
+            modelAndView.addObject("movieAverage", movie.getRating());
+        }
         return modelAndView;
     }
 
@@ -194,7 +201,7 @@ public class PublicController {
         if(movies.size() > 0) {
             try {
                 for (Movie m : movies) {
-                    if (m.getPosterUrl() == null) {
+                    if (m.getPosterUrl() == null || m.getPosterUrl().equals("")) {
                         m.setPosterUrl(posterService.getPoster(m.getImdbId()));
                     }
                 }
@@ -208,6 +215,26 @@ public class PublicController {
 
 
         return modelAndView;
+    }
+
+
+    @GetMapping("addMovie")
+    public ModelAndView addMovieGet(Model model, @RequestParam(value = "added",required = false) String added){
+        ModelAndView modelAndView = new ModelAndView("addMovie.html");
+        modelAndView.addObject("movieTemp",new MovieTemp());
+        if(added != null){
+            modelAndView.addObject("message","Added Movie");
+        }
+        return modelAndView;
+    }
+
+    @PostMapping("addMovie")
+    public ModelAndView addMoviePost(Model model, @ModelAttribute("movieTemp") MovieTemp movie, Errors errors){
+        ModelAndView modelAndView = new ModelAndView("redirect:/public/addMovie?added=true");
+        modelAndView.addObject("message","Added Movie");
+        movieTempRepository.save(movie);
+        return modelAndView;
+
     }
 
 }
